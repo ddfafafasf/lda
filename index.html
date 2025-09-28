@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LDA - Divulgação | Destaque seu Grupo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg1: #071126;
+            --bg2: #0f1724;
+            --accent: #5eead4;
+            --accent2: #60a5fa;
+            --gold: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --glass: rgba(255, 255, 255, 0.04);
+            --maxw: 1200px;
+            --radius: 14px;
+            --trans: 300ms cubic-bezier(.2, .9, .3, 1);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            background: linear-gradient(180deg, var(--bg1), var(--bg2));
+            color: #e6eef8;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+
+        /* Header e Navegação */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: linear-gradient(180deg, rgba(7, 17, 38, 0.95), rgba(7, 17, 38, 0.85));
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--trans);
+        }
+
+        header.scrolled {
+            background: rgba(7, 17, 38, 0.98);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-container {
+            max-width: var(--maxw);
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #042028;
+            font-size: 1.2rem;
+        }
+
+        .logo-text h1 {
+            font-size: 1.3rem;
+            margin: 0;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text span {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 5px;
+        }
+
+        nav a {
+            color: inherit;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: var(--trans);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav a:hover, nav a.active {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--accent);
+        }
+
+        .wallet {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chip {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .cta-button {
+            background: linear-gradient(90deg, var(--gold), #fbbf24);
+            color: #04121b;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--trans);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Conteúdo Principal */
+        main {
+            padding-top: 70px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: var(--maxw);
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .hero-content h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--trans);
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            color: #042028;
+            box-shadow: 0 4px 15px rgba(94, 234, 212, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(94, 234, 212, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: inherit;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .hero-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(94, 234, 212, 0.03), transparent);
+            z-index: 0;
+        }
+
+        .hero-card-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            background: var(--gold);
+            color: #04121b;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gold);
+            margin: 10px 0;
+        }
+
+        .feature-list {
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .feature-item i {
+            color: var(--accent);
+        }
+
+        /* Seções Gerais */
+        .section {
+            margin: 80px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Grid de Recursos */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: var(--trans);
+            text-align: center;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: var(--shadow);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+            color: #042028;
+        }
+
+        /* Planos */
+        .plans-container {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .plan-card {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            width: 300px;
+            transition: var(--trans);
+            position: relative;
+        }
+
+        .plan-card.popular {
+            border: 2px solid var(--gold);
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(245, 158, 11, 0.2);
+        }
+
+        .plan-card.popular::before {
+            content: 'MAIS POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gold);
+            color: #04121b;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+
+        .plan-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gold);
+        }
+
+        .plan-duration {
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+
+        .plan-features {
+            margin: 20px 0;
+        }
+
+        .plan-feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .plan-feature i {
+            color: var(--accent);
+        }
+
+        /* Grupos */
+        .groups-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .group-card {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+            transition: var(--trans);
+        }
+
+        .group-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .group-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .group-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .group-info h3 {
+            margin-bottom: 5px;
+        }
+
+        .group-type {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        .group-badge {
+            margin-left: auto;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .badge-premium {
+            background: var(--gold);
+            color: #04121b;
+        }
+
+        .badge-free {
+            background: var(--accent2);
+            color: #04121b;
+        }
+
+        .group-body {
+            padding: 20px;
+        }
+
+        .group-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .group-stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .group-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Formulários */
+        .form-container {
+            background: rgba(255, 255, 255, 0.02);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: inherit;
+            font-family: inherit;
+            transition: var(--trans);
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(94, 234, 212, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* FAQ */
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: var(--trans);
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .faq-answer {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 20px;
+            max-height: 500px;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 50px 0 20px;
+            margin-top: 80px;
+        }
+
+        .footer-content {
+            max-width: var(--maxw);
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: inherit;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: var(--trans);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--trans);
+        }
+
+        .social-link:hover {
+            background: var(--accent);
+            color: #042028;
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            opacity: 0.7;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--bg2);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: var(--trans);
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsividade */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            
+            .hero-content h2 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                display: none;
+            }
+            
+            .hamburger {
+                display: block;
+            }
+            
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+            
+            .plans-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .plan-card.popular {
+                transform: none;
+            }
+            
+            .groups-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .wallet {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="mainHeader">
+        <div class="nav-container">
+            <a href="#" class="logo" onclick="showPage('home')">
+                <div class="logo-icon">LD</div>
+                <div class="logo-text">
+                    <h1>LDA Divulgação</h1>
+                    <span>Conecte seu grupo ao público certo</span>
+                </div>
+            </a>
+            
+            <nav>
+                <ul id="mainNav">
+                    <li><a href="#" class="nav-link active" onclick="showPage('home')"><i class="fas fa-home"></i> Início</a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('groups')"><i class="fas fa-users"></i> Grupos</a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('plans')"><i class="fas fa-crown"></i> Planos</a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('pratas')"><i class="fas fa-gem"></i> Pratas</a></li>
+                    <li><a href="#" class="nav-link" onclick="showPage('news')"><i class="fas fa-newspaper"></i> Novidades</a></li>
+                </ul>
+            </nav>
+            
+            <div class="wallet">
+                <div class="chip">
+                    <i class="fas fa-gem"></i>
+                    <span id="pratasCount">150</span> pratas
+                </div>
+                <div class="chip">
+                    <i class="fas fa-crown"></i>
+                    <span id="premiumDays">5</span> dias
+                </div>
+                <button class="cta-button" onclick="openAdModal()">
+                    <i class="fas fa-play-circle"></i> Assistir Anúncio
+                </button>
+            </div>
+            
+            <button class="hamburger" id="hamburgerBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main>
+        <!-- Página Inicial -->
+        <section id="home" class="page active">
+            <div class="container">
+                <div class="hero">
+                    <div class="hero-content">
+                        <h2>Conecte seu grupo ao público certo</h2>
+                        <p>Promova servidores Discord, grupos de Telegram e listas do WhatsApp com planos acessíveis e destaque Premium. Aumente sua comunidade de forma eficiente.</p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary" onclick="showPage('plans')">
+                                <i class="fas fa-crown"></i> Ver Planos
+                            </button>
+                            <button class="btn btn-secondary" onclick="showPage('groups')">
+                                <i class="fas fa-users"></i> Explorar Grupos
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="hero-card pulse">
+                        <div class="card-badge">DESTAQUE</div>
+                        <div class="hero-card-content">
+                            <h3>Plano Premium 3 Meses</h3>
+                            <div class="price">R$ 50,00</div>
+                            <p>Mais visibilidade para seu grupo</p>
+                            
+                            <div class="feature-list">
+                                <div class="feature-item">
+                                    <i class="fas fa-check"></i>
+                                    <span>Destaque na página inicial</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-check"></i>
+                                    <span>Badge exclusivo</span>
+                                </div>
+                                <div class="feature-item">
+                                    <i class="fas fa-check"></i>
+                                    <span>Estatísticas detalhadas</span>
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-primary" style="width: 100%;" onclick="purchasePlan('3m')">
+                                <i class="fas fa-shopping-cart"></i> Comprar Agora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recursos -->
+                <div class="section">
+                    <div class="section-header">
+                        <h2>Por que escolher a LDA?</h2>
+                        <p>Oferecemos as melhores ferramentas para impulsionar sua comunidade</p>
+                    </div>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h3>Divulgação Rápida</h3>
+                            <p>Seu grupo é divulgado instantaneamente para milhares de usuários</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <h3>Estatísticas Detalhadas</h3>
+                            <p>Acompanhe o crescimento do seu grupo com métricas precisas</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <h3>Totalmente Responsivo</h3>
+                            <p>Funciona perfeitamente em dispositivos móveis e desktop</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Estatísticas -->
+                <div class="section">
+                    <div class="section-header">
+                        <h2>Nossos Números</h2>
+                        <p>Comprovamos nossa eficiência através de resultados</p>
+                    </div>
+                    
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="stat-value">1.250+</div>
+                            <div class="stat-label">Usuários Ativos</div>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="stat-value">347</div>
+                            <div class="stat-label">Grupos Divulgados</div>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="stat-value">89</div>
+                            <div class="stat-label">Grupos Premium</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Página Grupos -->
+        <section id="groups" class="page">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Grupos em Destaque</h2>
+                    <p>Conheça as comunidades que já estão crescendo com a LDA</p>
+                </div>
+                
+                <div class="groups-container" id="groupsList">
+                    <!-- Grupos serão carregados dinamicamente -->
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="btn btn-primary" onclick="showSubmitForm()">
+                        <i class="fas fa-plus"></i> Adicionar Meu Grupo
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Página Planos -->
+        <section id="plans" class="page">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Planos Premium</h2>
+                    <p>Escolha o plano ideal para suas necessidades</p>
+                </div>
+                
+                <div class="plans-container">
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <div class="plan-name">12 Dias</div>
+                            <div class="plan-price">R$ 15</div>
+                            <div class="plan-duration">Duração: 12 dias</div>
+                        </div>
+                        
+                        <div class="plan-features">
+                            <div class="plan-feature">
+                                <i class="fas fa-check"></i>
+                                <span>Destaque na lista de grupos</span>
+                            </div>
+                            <div class="plan-feature">
+                                <i class="fas fa-check"></i>
+                                <span>Badge "Premium"</span>
+                            </div>
+                            <div class="plan-feature">
+                                <i class="fas fa-check"></i>
+                                <span>Estatísticas básicas</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" style="width: 100%;" onclick="purchasePlan('12d')">
+                            <i class="fas fa-shopping-cart"></i> Assinar
+                        </button>
+                    </div>
+                    
+                    <div class="plan-card popular">
+                        <div class="plan-header">
+                            <div class="plan-name">1 Mês</div>
+                            <div class="plan-price">R$ 25</div>
+                            <div class="plan-duration">Duração: 30 dias</div>
+                        </div>
+                        
+                        <div class="plan-features">
+                            <div class="plan-feature">
+                                <i class="fas fa-check"></i>
+                                <span>Todos os benefícios do plano 12 dias</span>
+                            </div>
+                            <div class="plan-feature">
+                                <i class="fas fa-check"></i>
+                                <span>Posição destacada na página inicial</span>
+                            </div>
+                            <div class="plan-feature">
+                                <i class="fas fa-check"></i>
+                                <span>Estatísticas detalhadas</span>
+                            </div>
+                            <div class="plan-feature">
+                                <i class="fas fa-check"></i>
+                                <span>Suporte prioritário</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" style="width: 100%;" onclick="purchasePlan('1m')">
+                            <i class="fas fa-shopping-cart"></i> Assinar
+                        </button>
+                    </div>
+                    
+                    <div class="plan-card">
+                        <div class="plan-header">
+                            <div class="plan-name">3 Meses</div>
+                            <div class="plan-price">R$ 50</div>
+                            <div class="plan-duration">Duração: 90 dias</div>
+                        </div>
+                        
+                        <div class="plan-features">
+                            <div class="plan-feature">
+                                <i class="fas fa-check"></i>
+                                <span>Todos os benefícios do plano 1 mês</span>
+                            </div>
+                            <div class="plan-feature">
+                                <i class="fas fa-check"></i>
+                                <span>Destaque máximo (rotativo na hero)</span>
+                            </div>
+                            <div class="plan-feature">
+                                <i class="fas fa-check"></i>
+                                <span>Análise de crescimento</span>
+                            </div>
+                            <div class="plan-feature">
+                                <i class="fas fa-check"></i>
+                                <span>Relatórios mensais</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" style="width: 100%;" onclick="purchasePlan('3m')">
+                            <i class="fas fa-shopping-cart"></i> Assinar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Página Pratas -->
+        <section id="pratas" class="page">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Sistema de Pratas</h2>
+                    <p>Ganhe pratas assistindo anúncios e troque por benefícios Premium</p>
+                </div>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <h3>Assista Anúncios</h3>
+                        <p>Assista anúncios completos para ganhar pratas</p>
+                        <button class="btn btn-primary" style="margin-top: 15px;" onclick="openAdModal()">
+                            Assistir Agora
+                        </button>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <h3>Acumule Pratas</h3>
+                        <p>Cada anúncio assistido vale 10 pratas</p>
+                        <div style="margin-top: 15px; font-size: 1.2rem; font-weight: 700; color: var(--accent);">
+                            Suas pratas: <span id="userPratas">150</span>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <h3>Troque por Premium</h3>
+                        <p>100 pratas = 10 dias de Premium</p>
+                        <button class="btn btn-primary" style="margin-top: 15px;" onclick="redeemForPremium()">
+                            Trocar Agora
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-header">
+                        <h2>Histórico de Atividades</h2>
+                    </div>
+                    
+                    <div id="activityLog">
+                        <!-- Atividades serão carregadas dinamicamente -->
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Página Novidades -->
+        <section id="news" class="page">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Últimas Novidades</h2>
+                    <p>Fique por dentro das atualizações e promoções</p>
+                </div>
+                
+                <div id="newsFeed">
+                    <!-- Notícias serão carregadas dinamicamente -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>LDA Divulgação</h3>
+                <p>Conectamos comunidades ao público certo através de divulgação eficiente e acessível.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-telegram"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Links Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="#" onclick="showPage('home')"><i class="fas fa-home"></i> Início</a></li>
+                    <li><a href="#" onclick="showPage('groups')"><i class="fas fa-users"></i> Grupos</a></li>
+                    <li><a href="#" onclick="showPage('plans')"><i class="fas fa-crown"></i> Planos</a></li>
+                    <li><a href="#" onclick="showPage('pratas')"><i class="fas fa-gem"></i> Pratas</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Suporte</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-question-circle"></i> Central de Ajuda</a></li>
+                    <li><a href="#"><i class="fas fa-envelope"></i> Contato</a></li>
+                    <li><a href="#"><i class="fas fa-file-alt"></i> Termos de Uso</a></li>
+                    <li><a href="#"><i class="fas fa-shield-alt"></i> Política de Privacidade</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 LDA Divulgação. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Modal de Anúncio -->
+    <div class="modal" id="adModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAdModal()">&times;</button>
+            <div class="modal-header">
+                <h3>Assistir Anúncio</h3>
+                <p>Assista até o final para ganhar 10 pratas</p>
+            </div>
+            
+            <div style="text-align: center; padding: 20px 0;">
+                <div id="adCountdown" style="font-size: 3rem; font-weight: 700; color: var(--accent); margin: 20px 0;">00:15</div>
+                <p>Anúncio em andamento...</p>
+                
+                <div style="height: 200px; background: rgba(255,255,255,0.05); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 20px 0;">
+                    <i class="fas fa-ad" style="font-size: 4rem; opacity: 0.3;"></i>
+                </div>
+                
+                <button class="btn btn-secondary" onclick="closeAdModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Adicionar Grupo -->
+    <div class="modal" id="addGroupModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeAddGroupModal()">&times;</button>
+            <div class="modal-header">
+                <h3>Adicionar Grupo</h3>
+                <p>Preencha as informações do seu grupo para divulgação</p>
+            </div>
+            
+            <form id="addGroupForm">
+                <div class="form-group">
+                    <label class="form-label" for="groupName">Nome do Grupo</label>
+                    <input type="text" id="groupName" class="form-input" placeholder="Ex: Comunidade Gamers BR" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="groupType">Tipo de Grupo</label>
+                    <select id="groupType" class="form-select" required>
+                        <option value="">Selecione o tipo</option>
+                        <option value="discord">Discord</option>
+                        <option value="telegram">Telegram</option>
+                        <option value="whatsapp">WhatsApp</option>
+                        <option value="outro">Outro</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="groupLink">Link/Convite</label>
+                    <input type="url" id="groupLink" class="form-input" placeholder="https://discord.gg/..." required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="groupDesc">Descrição</label>
+                    <textarea id="groupDesc" class="form-textarea" placeholder="Descreva seu grupo..." required></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-paper-plane"></i> Enviar para Análise
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Estado da aplicação
+        const state = {
+            pratas: 150,
+            premiumDays: 5,
+            currentPage: 'home',
+            groups: [
+                {
+                    id: 1,
+                    name: 'Comunidade Gamers BR',
+                    type: 'discord',
+                    link: '#',
+                    desc: 'Comunidade para jogadores brasileiros de todos os games. Eventos semanais e parcerias com streamers.',
+                    members: 1250,
+                    online: 342,
+                    premium: true
+                },
+                {
+                    id: 2,
+                    name: 'Tech Talks',
+                    type: 'telegram',
+                    link: '#',
+                    desc: 'Discussões sobre tecnologia, programação e inovação. Compartilhamento de oportunidades na área.',
+                    members: 890,
+                    online: 210,
+                    premium: false
+                },
+                {
+                    id: 3,
+                    name: 'Investimentos para Iniciantes',
+                    type: 'whatsapp',
+                    link: '#',
+                    desc: 'Aprenda sobre investimentos de forma simples e prática. Análises de mercado e dicas valiosas.',
+                    members: 650,
+                    online: 85,
+                    premium: true
+                },
+                {
+                    id: 4,
+                    name: 'Estudos em Grupo',
+                    type: 'discord',
+                    link: '#',
+                    desc: 'Comunidade para estudos colaborativos e compartilhamento de conhecimento. Foco em concursos e vestibulares.',
+                    members: 420,
+                    online: 120,
+                    premium: false
+                }
+            ],
+            activities: [
+                { id: 1, type: 'ad', description: 'Anúncio assistido - +10 pratas', date: '2025-03-15 14:30' },
+                { id: 2, type: 'premium', description: 'Premium ativado - 10 dias', date: '2025-03-14 10:15' },
+                { id: 3, type: 'ad', description: 'Anúncio assistido - +10 pratas', date: '2025-03-13 16:45' }
+            ],
+            news: [
+                { id: 1, title: 'Sistema de Pratas Lançado!', content: 'Agora você pode ganhar pratas assistindo anúncios e trocar por dias de Premium.', date: '2025-03-10' },
+                { id: 2, title: 'Novos Planos Disponíveis', content: 'Confira nossos novos planos com preços mais acessíveis e benefícios exclusivos.', date: '2025-03-05' },
+                { id: 3, title: 'Bem-vindo à LDA Divulgação', content: 'Estamos felizes em anunciar o lançamento da nossa plataforma de divulgação de grupos.', date: '2025-03-01' }
+            ]
+        };
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            updateUI();
+            renderGroups();
+            renderActivities();
+            renderNews();
+            setupEventListeners();
+            
+            // Efeito de scroll no header
+            window.addEventListener('scroll', function() {
+                const header = document.getElementById('mainHeader');
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+        });
+
+        // Navegação entre páginas
+        function showPage(pageId) {
+            // Esconder todas as páginas
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Mostrar a página selecionada
+            document.getElementById(pageId).classList.add('active');
+            
+            // Atualizar link ativo na navegação
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            // Rolagem para o topo
+            window.scrollTo(0, 0);
+            
+            state.currentPage = pageId;
+        }
+
+        // Atualizar interface
+        function updateUI() {
+            document.getElementById('pratasCount').textContent = state.pratas;
+            document.getElementById('premiumDays').textContent = state.premiumDays;
+            document.getElementById('userPratas').textContent = state.pratas;
+        }
+
+        // Renderizar grupos
+        function renderGroups() {
+            const groupsContainer = document.getElementById('groupsList');
+            groupsContainer.innerHTML = '';
+            
+            state.groups.forEach(group => {
+                const groupCard = document.createElement('div');
+                groupCard.className = 'group-card';
+                
+                groupCard.innerHTML = `
+                    <div class="group-header">
+                        <div class="group-icon">
+                            <i class="fab fa-${group.type}"></i>
+                        </div>
+                        <div class="group-info">
+                            <h3>${group.name}</h3>
+                            <div class="group-type">${group.type.charAt(0).toUpperCase() + group.type.slice(1)}</div>
+                        </div>
+                        <div class="group-badge ${group.premium ? 'badge-premium' : 'badge-free'}">
+                            ${group.premium ? 'Premium' : 'Gratuito'}
+                        </div>
+                    </div>
+                    <div class="group-body">
+                        <p>${group.desc}</p>
+                        <div class="group-stats">
+                            <div class="group-stat">
+                                <div class="stat-value">${group.members}</div>
+                                <div class="stat-label">Membros</div>
+                            </div>
+                            <div class="group-stat">
+                                <div class="stat-value">${group.online}</div>
+                                <div class="stat-label">Online</div>
+                            </div>
+                        </div>
+                        <div class="group-actions">
+                            <button class="btn btn-primary" style="flex: 1;">
+                                <i class="fas fa-sign-in-alt"></i> Entrar
+                            </button>
+                            <button class="btn btn-secondary">
+                                <i class="fas fa-info-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                groupsContainer.appendChild(groupCard);
+            });
+        }
+
+        // Renderizar atividades
+        function renderActivities() {
+            const activityLog = document.getElementById('activityLog');
+            activityLog.innerHTML = '';
+            
+            if (state.activities.length === 0) {
+                activityLog.innerHTML = '<p style="text-align: center; opacity: 0.7;">Nenhuma atividade registrada ainda.</p>';
+                return;
+            }
+            
+            state.activities.forEach(activity => {
+                const activityItem = document.createElement('div');
+                activityItem.className = 'feature-card';
+                activityItem.style.textAlign = 'left';
+                
+                activityItem.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h3 style="margin: 0; font-size: 1.1rem;">${activity.description}</h3>
+                        <span style="opacity: 0.7; font-size: 0.9rem;">${activity.date}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <i class="fas fa-${activity.type === 'ad' ? 'play-circle' : 'crown'}" style="color: var(--accent);"></i>
+                        <span>${activity.type === 'ad' ? 'Anúncio' : 'Premium'}</span>
+                    </div>
+                `;
+                
+                activityLog.appendChild(activityItem);
+            });
+        }
+
+        // Renderizar notícias
+        function renderNews() {
+            const newsFeed = document.getElementById('newsFeed');
+            newsFeed.innerHTML = '';
+            
+            state.news.forEach(newsItem => {
+                const newsCard = document.createElement('div');
+                newsCard.className = 'feature-card';
+                newsCard.style.textAlign = 'left';
+                
+                newsCard.innerHTML = `
+                    <h3>${newsItem.title}</h3>
+                    <p style="margin: 10px 0;">${newsItem.content}</p>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                        <span style="opacity: 0.7; font-size: 0.9rem;">${newsItem.date}</span>
+                        <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 0.9rem;">
+                            <i class="fas fa-share"></i> Compartilhar
+                        </button>
+                    </div>
+                `;
+                
+                newsFeed.appendChild(newsCard);
+            });
+        }
+
+        // Modal de anúncio
+        function openAdModal() {
+            document.getElementById('adModal').classList.add('active');
+            startAdCountdown();
+        }
+
+        function closeAdModal() {
+            document.getElementById('adModal').classList.remove('active');
+            stopAdCountdown();
+        }
+
+        let countdownInterval;
+        function startAdCountdown() {
+            let seconds = 15;
+            const countdownElement = document.getElementById('adCountdown');
+            
+            countdownInterval = setInterval(() => {
+                seconds--;
+                countdownElement.textContent = `00:${seconds < 10 ? '0' + seconds : seconds}`;
+                
+                if (seconds <= 0) {
+                    clearInterval(countdownInterval);
+                    rewardPratas(10);
+                    closeAdModal();
+                    showToast('+10 pratas adicionadas!', 'success');
+                }
+            }, 1000);
+        }
+
+        function stopAdCountdown() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+        }
+
+        // Sistema de pratas
+        function rewardPratas(amount) {
+            state.pratas += amount;
+            state.activities.unshift({
+                id: state.activities.length + 1,
+                type: 'ad',
+                description: `Anúncio assistido - +${amount} pratas`,
+                date: new Date().toLocaleString('pt-BR')
+            });
+            
+            updateUI();
+            renderActivities();
+        }
+
+        function redeemForPremium() {
+            if (state.pratas >= 100) {
+                state.pratas -= 100;
+                state.premiumDays += 10;
+                state.activities.unshift({
+                    id: state.activities.length + 1,
+                    type: 'premium',
+                    description: 'Premium ativado - 10 dias',
+                    date: new Date().toLocaleString('pt-BR')
+                });
+                
+                updateUI();
+                renderActivities();
+                showToast('10 dias de Premium ativados!', 'success');
+            } else {
+                showToast('Você precisa de 100 pratas para trocar por Premium', 'error');
+            }
+        }
+
+        // Sistema de planos
+        function purchasePlan(plan) {
+            const planMap = {
+                '12d': { name: '12 Dias', price: 15, days: 12 },
+                '1m': { name: '1 Mês', price: 25, days: 30 },
+                '3m': { name: '3 Meses', price: 50, days: 90 }
+            };
+            
+            const selectedPlan = planMap[plan];
+            
+            if (confirm(`Deseja assinar o plano ${selectedPlan.name} por R$ ${selectedPlan.price}?`)) {
+                state.premiumDays += selectedPlan.days;
+                state.activities.unshift({
+                    id: state.activities.length + 1,
+                    type: 'premium',
+                    description: `Plano ${selectedPlan.name} adquirido - +${selectedPlan.days} dias`,
+                    date: new Date().toLocaleString('pt-BR')
+                });
+                
+                updateUI();
+                renderActivities();
+                showToast(`Plano ${selectedPlan.name} ativado com sucesso!`, 'success');
+            }
+        }
+
+        // Modal de adicionar grupo
+        function showSubmitForm() {
+            document.getElementById('addGroupModal').classList.add('active');
+        }
+
+        function closeAddGroupModal() {
+            document.getElementById('addGroupModal').classList.remove('active');
+        }
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Formulário de adicionar grupo
+            document.getElementById('addGroupForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const groupName = document.getElementById('groupName').value;
+                const groupType = document.getElementById('groupType').value;
+                const groupLink = document.getElementById('groupLink').value;
+                const groupDesc = document.getElementById('groupDesc').value;
+                
+                // Adicionar grupo (simulação)
+                const newGroup = {
+                    id: state.groups.length + 1,
+                    name: groupName,
+                    type: groupType,
+                    link: groupLink,
+                    desc: groupDesc,
+                    members: Math.floor(Math.random() * 500) + 50,
+                    online: Math.floor(Math.random() * 100) + 10,
+                    premium: false
+                };
+                
+                state.groups.push(newGroup);
+                renderGroups();
+                closeAddGroupModal();
+                showToast('Grupo enviado para análise!', 'success');
+                
+                // Limpar formulário
+                this.reset();
+            });
+            
+            // Menu hamburger para mobile
+            document.getElementById('hamburgerBtn').addEventListener('click', function() {
+                const nav = document.getElementById('mainNav');
+                nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+
+        // Toast notifications
+        function showToast(message, type = 'info') {
+            // Criar elemento toast
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 10px;
+                background: ${type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--danger)' : 'var(--accent2)'};
+                color: white;
+                font-weight: 600;
+                z-index: 10000;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                animation: fadeIn 0.3s ease;
+            `;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            // Remover após 3 segundos
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+
+        // Adicionar animação de fadeOut
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateY(0); }
+                to { opacity: 0; transform: translateY(20px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
